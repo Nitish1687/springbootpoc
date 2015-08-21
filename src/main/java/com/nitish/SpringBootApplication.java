@@ -1,16 +1,18 @@
 package com.nitish;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
+
 
 @org.springframework.boot.autoconfigure.SpringBootApplication
-@EnableWebMvc
+@EnableAutoConfiguration
 public class SpringBootApplication {
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication();
         springApplication.setShowBanner(false);
         springApplication.setHeadless(false);
         springApplication.setWebEnvironment(false);
-        SpringApplication.run(SpringBootApplication.class, args);
+        ConfigurableApplicationContext run = SpringApplication.run(SpringBootApplication.class, args);
     }
 }

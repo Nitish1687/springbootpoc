@@ -1,20 +1,15 @@
 package com.nitish.domain;
 
-public class Greeting {
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
-        private String id;
-        private String name;
-        private String message;
+@Entity(value = "GREETING", noClassnameStored = true)
+public class MorphiaGreetingDomain {
 
-    public Greeting() {
-
-    }
-
-    public Greeting(String id, String name, String message) {
-        this.id = id;
-        this.name = name;
-        this.message = message;
-    }
+    @Id
+    private String id;
+    private String name;
+    private String message;
 
     public String getId() {
         return id;

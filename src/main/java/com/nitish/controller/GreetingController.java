@@ -1,7 +1,7 @@
 package com.nitish.controller;
 
 import com.nitish.domain.Greeting;
-import com.nitish.service.GreetingService;
+import com.nitish.service.MorphiaGreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -19,17 +19,18 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class GreetingController {
 
     @Autowired
-    private GreetingService greetingService;
+//    private GreetingServiceInterface greetingServiceInterface;
+    private MorphiaGreetingService greetingServiceInterface;
 
     @RequestMapping(value = "/greeting/save", method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Collection<Greeting> createGreeting(@RequestBody Collection<Greeting> greetings) {
-        return greetingService.createGreeting(greetings);
+        return greetingServiceInterface.createGreeting(greetings);
     }
 
     @RequestMapping(value = "/greeting/all", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Greeting>> showGreeting() {
-        Collection<Greeting> allGreeting = greetingService.getAllGreeting();
+        Collection<Greeting> allGreeting = greetingServiceInterface.getAllGreeting();
         if (!CollectionUtils.isEmpty(allGreeting)) {
             return new ResponseEntity<>(allGreeting, OK);
         }
@@ -38,14 +39,14 @@ public class GreetingController {
 
     @RequestMapping(value = "/greeting/{greetingId}", method = GET, produces = APPLICATION_JSON_VALUE)
     public Greeting showGreetingFor(@PathVariable String greetingId) {
-        return greetingService.getGreetingFor(greetingId);
+        return greetingServiceInterface.getGreetingFor(greetingId);
     }
 
     @RequestMapping(value = "/greeting/{greetingId}/delete", method = DELETE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity deleteGreetingFor(@PathVariable String greetingId) {
-        if (greetingService.isGreetingExistFor(greetingId)) {
-            greetingService.deleteGreetingFor(greetingId);
+        if (greetingServiceInterface.isGreetingExistFor(greetingId)) {
+            greetingServiceInterface.deleteGreetingFor(greetingId);
             return new ResponseEntity("SuccessFully Deleted Greeting", OK);
         }
         return new ResponseEntity(format("Error While Deleting Entry for %s", greetingId), NOT_FOUND);
@@ -54,11 +55,11 @@ public class GreetingController {
     @RequestMapping(value = "greeting/{greetingId}/update", method = PUT, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity updateGreetingFor(@PathVariable String greetingId, @RequestBody Greeting greeting) {
-        if (greetingService.isGreetingExistFor(greetingId)) {
-            greetingService.updateGreetingIntoDb(greeting);
+        if (greetingServiceInterface.isGreetingExistFor(greetingId)) {
+            greetingServiceInterface.updateGreetingIntoDb(greeting);
             return new ResponseEntity<>(ACCEPTED);
         }
-        greetingService.createGreeting(asList(greeting));
+        greetingServiceInterface.createGreeting(asList(greeting));
         return new ResponseEntity("Greeting Successfully Created", CREATED);
     }
 
